@@ -1,10 +1,10 @@
-# Career Compass
+# NextJobber
 
 A private Site-hosted ChatGPT plugin for independent job seekers. It combines original career self-reflection questionnaires, transferable-skill evidence, live remote job discovery, requirement comparisons, application drafts, learning plans, and an application tracker.
 
 ## Edit your own copy
 
-This private repository contains the full application source and the current plugin package under `plugin-skills/`. **Career Compass is a working name; the final brand has not been selected.**
+This private repository contains the full application source and the current plugin package under `plugin-skills/`. **NextJobber is a working name; the final brand has not been selected.**
 
 - [Development guide](docs/DEVELOPMENT.md): install, run, test, edit assessments and workflows, and publish updates.
 - [Project identity and source snapshot](docs/PROJECT.md): the existing Site, plugin, and source version this copy came from.
