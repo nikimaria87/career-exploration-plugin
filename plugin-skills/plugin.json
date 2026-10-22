@@ -1,0 +1,32 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dev-3c1684dd4fb48191b2ae177ea06727a3",
+  "version": "1.1.0",
+  "description": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
+  "author": {
+    "name": "App developer"
+  },
+  "keywords": [
+    "careers",
+    "job-search",
+    "resume",
+    "interview",
+    "assessments",
+    "learning"
+  ],
+  "extensions": {
+    "com.openai": {
+      "apps": "./.app.json",
+      "interface": {
+        "capabilities": [],
+        "category": "Other",
+        "defaultPrompt": null,
+        "developerName": "App developer",
+        "displayName": "Career Compass",
+        "longDescription": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
+        "shortDescription": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
+        "websiteURL": "https://career-compass-explore-1022.fizzy-camel-0518.chatgpt.site"
+      }
+    }
+  }
+}
