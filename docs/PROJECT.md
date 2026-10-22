@@ -4,7 +4,7 @@ Exported October 22, 2026, into a private repository owned by `nikimaria87`.
 
 | Item | Current value |
 | --- | --- |
-| Working product name | Career Compass |
+| Product name | NextJobber |
 | GitHub repository | https://github.com/nikimaria87/career-exploration-plugin |
 | Dashboard | https://career-compass-explore-1022.fizzy-camel-0518.chatgpt.site |
 | MCP endpoint | https://career-compass-explore-1022.fizzy-camel-0518.chatgpt.site/mcp |

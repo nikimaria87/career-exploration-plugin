@@ -1,0 +1,87 @@
+[
+  {
+    "category": "Brandkit Settings",
+    "path": "brand-settings.json",
+    "description": "Color, type, spacing, and usage settings."
+  },
+  {
+    "category": "Logo Files",
+    "path": "logos/nextjobber-wordmark-primary.svg",
+    "description": "Outlined SVG masters, transparent PNGs, and print PDF."
+  },
+  {
+    "category": "Brand Guides",
+    "path": "guidelines/NextJobber_Brand_Guide.pdf",
+    "description": "Guidelines in PDF and editable Markdown."
+  },
+  {
+    "category": "Websites",
+    "path": "websites/landing-page.html",
+    "description": "Responsive landing page and link-page templates."
+  },
+  {
+    "category": "Profile Icons",
+    "path": "icons/nextjobber-profile-plum.png",
+    "description": "Three colorways, favicons, and app icon sizes."
+  },
+  {
+    "category": "Mockups",
+    "path": "mockups/stationery.png",
+    "description": "Generated stationery and laptop concept mockups."
+  },
+  {
+    "category": "Business Cards",
+    "path": "print/business-card-front.pdf",
+    "description": "Front and back with bleed and editable contact fields."
+  },
+  {
+    "category": "Facebook Covers",
+    "path": "social/facebook-cover-plum.png",
+    "description": "Two 1640 \u00d7 624 cover designs."
+  },
+  {
+    "category": "Instagram Posts",
+    "path": "social/instagram-post-introduction.png",
+    "description": "Three editable post designs."
+  },
+  {
+    "category": "Instagram Stories",
+    "path": "social/instagram-story-explore.png",
+    "description": "Three editable 1080 \u00d7 1920 story designs."
+  },
+  {
+    "category": "Presentations",
+    "path": "presentations/NextJobber_Presentation_Template.pptx",
+    "description": "Editable six-slide PowerPoint starter."
+  },
+  {
+    "category": "Animations",
+    "path": "animations/nextjobber-reveal.mp4",
+    "description": "Logo reveal in MP4, GIF, and animated SVG."
+  },
+  {
+    "category": "QR Code",
+    "path": "qr/nextjobber-dashboard-qr.png",
+    "description": "Vector and raster QR, with destination notes."
+  },
+  {
+    "category": "Invoices",
+    "path": "print/NextJobber_Invoice_Template.docx",
+    "description": "Editable Word and printable PDF templates."
+  },
+  {
+    "category": "Design Tool",
+    "path": "studio/index.html",
+    "description": "Edit a branded poster and export SVG or PNG."
+  },
+  {
+    "category": "Enterprise Chat",
+    "path": "support/support-widget.html",
+    "description": "Support widget prototype and response library."
+  },
+  {
+    "category": "Download Fonts",
+    "path": "fonts/README.md",
+    "description": "Font files and redistribution license."
+  }
+]

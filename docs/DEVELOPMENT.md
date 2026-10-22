@@ -82,16 +82,16 @@ GitHub is your editable source repository. The dashboard and MCP tools still run
 3. Save and deploy the packaged source through Sites, then check the returned deployment status. Keep the existing database and App/plugin identity.
 4. If workflow skills changed, retrieve the current plugin package and release ID through Plugin Creator. Reconcile with `plugin-skills/`, bump its semantic version, and submit a guarded update of the skills and supported metadata. Verify the saved files afterward. The App-backed plugin's title, App connection, and MCP configuration are owned by the Site.
 
-For example: "Publish the latest main commit from nikimaria87/career-exploration-plugin to my existing Career Compass Site. Preserve its project, database, plugin identity, and private access. Update the six packaged skills if they changed."
+For example: "Publish the latest main commit from nikimaria87/career-exploration-plugin to my existing NextJobber Site. Preserve its project, database, plugin identity, and private access. Update the six packaged skills if they changed."
 
 The supported publication path needs Sites and, for packaged skills, Plugin Creator. This repository does not yet provide a standalone deployment CLI or a GitHub Actions deployment pipeline. Deploying the application to another host would require implementing authentication and infrastructure for that host; the production auth headers are supplied by Sites.
 
 ## Rename the product
 
-Choose a final name before changing the branding. Search for current brand references:
+The selected brand is NextJobber. For a future rename, review these references. Search for current brand references:
 
 ```sh
-rg -n 'Career Compass|career-compass' app lib scripts/prepare-career-skills.mjs plugin-skills README.md docs
+rg -n 'NextJobber|career-compass' app lib scripts/prepare-career-skills.mjs plugin-skills README.md docs
 ```
 
 Update the UI, page metadata, MCP display strings, workflows, generator, and documentation consistently. Regenerate packaged skills, then publish to the same Site and update its display title through Sites. Keep stable IDs and saved data. A Site title change does not change its URL. Renaming a repository or Site URL is a separate choice and needs corresponding documentation/link updates.

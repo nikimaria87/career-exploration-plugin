@@ -1,0 +1,29 @@
+{
+  "name": "NextJobber",
+  "version": "1.0.0",
+  "tagline": "Your next career step, with a plan.",
+  "colors": {
+    "plum": "#4C1734",
+    "warmGray": "#766B70",
+    "ink": "#241C24",
+    "rose": "#E3B4C6",
+    "paper": "#FBF7F9",
+    "white": "#FFFFFF"
+  },
+  "typography": {
+    "body": "DejaVu Sans",
+    "heading": "DejaVu Sans Bold",
+    "logo": "Original outlined geometric lettering; no font installation required"
+  },
+  "spacing": {
+    "unit": 8,
+    "logoClearSpace": "At least half the capital-letter height on every side",
+    "minimumWordmarkWidthPx": 180,
+    "minimumSymbolWidthPx": 24
+  },
+  "links": {
+    "dashboard": "https://career-compass-explore-1022.fizzy-camel-0518.chatgpt.site",
+    "plugin": "https://chatgpt.com/plugins/plugin_asdk_app_sites_3c1684dd4fb48191b2ae177ea06727a3"
+  },
+  "accessNote": "Current dashboard requires the owner account. Review access before public campaigns."
+}

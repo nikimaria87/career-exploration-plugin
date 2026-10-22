@@ -1,0 +1,391 @@
+{
+  "brand": "NextJobber",
+  "version": "1.0.0",
+  "categories": 17,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2192
+    },
+    {
+      "path": "START-HERE.html",
+      "bytes": 6014
+    },
+    {
+      "path": "animations/nextjobber-reveal.gif",
+      "bytes": 152837
+    },
+    {
+      "path": "animations/nextjobber-reveal.mp4",
+      "bytes": 30912
+    },
+    {
+      "path": "animations/nextjobber-reveal.svg",
+      "bytes": 2072
+    },
+    {
+      "path": "animations/nextjobber-still.png",
+      "bytes": 45912
+    },
+    {
+      "path": "asset-categories.json",
+      "bytes": 2596
+    },
+    {
+      "path": "brand-settings.json",
+      "bytes": 917
+    },
+    {
+      "path": "brand.css",
+      "bytes": 308
+    },
+    {
+      "path": "fonts/DejaVuSans-Bold.ttf",
+      "bytes": 708920
+    },
+    {
+      "path": "fonts/DejaVuSans.ttf",
+      "bytes": 759720
+    },
+    {
+      "path": "fonts/LICENSE.txt",
+      "bytes": 3859
+    },
+    {
+      "path": "fonts/README.md",
+      "bytes": 256
+    },
+    {
+      "path": "guidelines/NextJobber_Brand_Guide.pdf",
+      "bytes": 139854
+    },
+    {
+      "path": "guidelines/brand-guide.md",
+      "bytes": 2150
+    },
+    {
+      "path": "icons/nextjobber-favicon.png",
+      "bytes": 1231
+    },
+    {
+      "path": "icons/nextjobber-favicon.svg",
+      "bytes": 396
+    },
+    {
+      "path": "icons/nextjobber-icon-16.png",
+      "bytes": 359
+    },
+    {
+      "path": "icons/nextjobber-icon-180.png",
+      "bytes": 3598
+    },
+    {
+      "path": "icons/nextjobber-icon-192.png",
+      "bytes": 3941
+    },
+    {
+      "path": "icons/nextjobber-icon-32.png",
+      "bytes": 623
+    },
+    {
+      "path": "icons/nextjobber-icon-48.png",
+      "bytes": 863
+    },
+    {
+      "path": "icons/nextjobber-icon-512.png",
+      "bytes": 15536
+    },
+    {
+      "path": "icons/nextjobber-profile-light.png",
+      "bytes": 42774
+    },
+    {
+      "path": "icons/nextjobber-profile-light.svg",
+      "bytes": 411
+    },
+    {
+      "path": "icons/nextjobber-profile-plum.png",
+      "bytes": 42352
+    },
+    {
+      "path": "icons/nextjobber-profile-plum.svg",
+      "bytes": 411
+    },
+    {
+      "path": "icons/nextjobber-profile-rose.png",
+      "bytes": 43125
+    },
+    {
+      "path": "icons/nextjobber-profile-rose.svg",
+      "bytes": 411
+    },
+    {
+      "path": "logos/NextJobber_Logos_Print.pdf",
+      "bytes": 83496
+    },
+    {
+      "path": "logos/nextjobber-lockup.png",
+      "bytes": 33191
+    },
+    {
+      "path": "logos/nextjobber-lockup.svg",
+      "bytes": 1453
+    },
+    {
+      "path": "logos/nextjobber-stacked.png",
+      "bytes": 46080
+    },
+    {
+      "path": "logos/nextjobber-stacked.svg",
+      "bytes": 1502
+    },
+    {
+      "path": "logos/nextjobber-symbol-white.png",
+      "bytes": 1218
+    },
+    {
+      "path": "logos/nextjobber-symbol-white.svg",
+      "bytes": 333
+    },
+    {
+      "path": "logos/nextjobber-symbol.png",
+      "bytes": 1445
+    },
+    {
+      "path": "logos/nextjobber-symbol.svg",
+      "bytes": 333
+    },
+    {
+      "path": "logos/nextjobber-wordmark-on-plum.png",
+      "bytes": 33707
+    },
+    {
+      "path": "logos/nextjobber-wordmark-on-plum.svg",
+      "bytes": 1293
+    },
+    {
+      "path": "logos/nextjobber-wordmark-on-white.png",
+      "bytes": 29530
+    },
+    {
+      "path": "logos/nextjobber-wordmark-on-white.svg",
+      "bytes": 1293
+    },
+    {
+      "path": "logos/nextjobber-wordmark-plum.png",
+      "bytes": 27199
+    },
+    {
+      "path": "logos/nextjobber-wordmark-plum.svg",
+      "bytes": 1245
+    },
+    {
+      "path": "logos/nextjobber-wordmark-primary.png",
+      "bytes": 29171
+    },
+    {
+      "path": "logos/nextjobber-wordmark-primary.svg",
+      "bytes": 1245
+    },
+    {
+      "path": "logos/nextjobber-wordmark-white.png",
+      "bytes": 22622
+    },
+    {
+      "path": "logos/nextjobber-wordmark-white.svg",
+      "bytes": 1245
+    },
+    {
+      "path": "mockups/laptop-concept.png",
+      "bytes": 1746069
+    },
+    {
+      "path": "mockups/stationery.png",
+      "bytes": 2519419
+    },
+    {
+      "path": "presentations/NextJobber_Presentation_Template.pptx",
+      "bytes": 2611834
+    },
+    {
+      "path": "print/NextJobber_Invoice_Template.docx",
+      "bytes": 64626
+    },
+    {
+      "path": "print/NextJobber_Invoice_Template.pdf",
+      "bytes": 80160
+    },
+    {
+      "path": "print/PRINT-README.md",
+      "bytes": 468
+    },
+    {
+      "path": "print/business-card-back.pdf",
+      "bytes": 45036
+    },
+    {
+      "path": "print/business-card-back.png",
+      "bytes": 38325
+    },
+    {
+      "path": "print/business-card-back.svg",
+      "bytes": 15110
+    },
+    {
+      "path": "print/business-card-front.pdf",
+      "bytes": 32152
+    },
+    {
+      "path": "print/business-card-front.png",
+      "bytes": 40530
+    },
+    {
+      "path": "print/business-card-front.svg",
+      "bytes": 1445
+    },
+    {
+      "path": "qr/NextJobber_QR_Print.pdf",
+      "bytes": 79860
+    },
+    {
+      "path": "qr/destination.txt",
+      "bytes": 160
+    },
+    {
+      "path": "qr/nextjobber-dashboard-qr.png",
+      "bytes": 11967
+    },
+    {
+      "path": "qr/nextjobber-dashboard-qr.svg",
+      "bytes": 13148
+    },
+    {
+      "path": "social/facebook-cover-light.png",
+      "bytes": 51218
+    },
+    {
+      "path": "social/facebook-cover-light.svg",
+      "bytes": 1445
+    },
+    {
+      "path": "social/facebook-cover-plum.png",
+      "bytes": 50704
+    },
+    {
+      "path": "social/facebook-cover-plum.svg",
+      "bytes": 1445
+    },
+    {
+      "path": "social/instagram-post-introduction.png",
+      "bytes": 68482
+    },
+    {
+      "path": "social/instagram-post-introduction.svg",
+      "bytes": 2157
+    },
+    {
+      "path": "social/instagram-post-learning.png",
+      "bytes": 54133
+    },
+    {
+      "path": "social/instagram-post-learning.svg",
+      "bytes": 2157
+    },
+    {
+      "path": "social/instagram-post-skills.png",
+      "bytes": 69586
+    },
+    {
+      "path": "social/instagram-post-skills.svg",
+      "bytes": 2047
+    },
+    {
+      "path": "social/instagram-story-apply.png",
+      "bytes": 88388
+    },
+    {
+      "path": "social/instagram-story-apply.svg",
+      "bytes": 2159
+    },
+    {
+      "path": "social/instagram-story-explore.png",
+      "bytes": 84736
+    },
+    {
+      "path": "social/instagram-story-explore.svg",
+      "bytes": 2027
+    },
+    {
+      "path": "social/instagram-story-learning.png",
+      "bytes": 53618
+    },
+    {
+      "path": "social/instagram-story-learning.svg",
+      "bytes": 2148
+    },
+    {
+      "path": "social/linkedin-cover.png",
+      "bytes": 38257
+    },
+    {
+      "path": "social/linkedin-cover.svg",
+      "bytes": 1444
+    },
+    {
+      "path": "social/social-copy.md",
+      "bytes": 619
+    },
+    {
+      "path": "source/apply-app-brand.py",
+      "bytes": 2773
+    },
+    {
+      "path": "source/build-animation.mjs",
+      "bytes": 2304
+    },
+    {
+      "path": "source/build-assets.py",
+      "bytes": 11284
+    },
+    {
+      "path": "source/build-documents.py",
+      "bytes": 8434
+    },
+    {
+      "path": "source/build-presentation.mjs",
+      "bytes": 5435
+    },
+    {
+      "path": "source/build-web.py",
+      "bytes": 14594
+    },
+    {
+      "path": "source/image-prompts.md",
+      "bytes": 2236
+    },
+    {
+      "path": "source/rasterize.mjs",
+      "bytes": 908
+    },
+    {
+      "path": "studio/index.html",
+      "bytes": 8567
+    },
+    {
+      "path": "support/response-library.md",
+      "bytes": 818
+    },
+    {
+      "path": "support/support-widget.html",
+      "bytes": 4245
+    },
+    {
+      "path": "websites/landing-page.html",
+      "bytes": 4577
+    },
+    {
+      "path": "websites/link-page.html",
+      "bytes": 3152
+    }
+  ]
+}

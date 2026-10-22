@@ -4,7 +4,9 @@ A private Site-hosted ChatGPT plugin for independent job seekers. It combines or
 
 ## Edit your own copy
 
-This private repository contains the full application source and the current plugin package under `plugin-skills/`. **NextJobber is a working name; the final brand has not been selected.**
+This private repository contains the full application source and the current plugin package under `plugin-skills/`. **The plugin is named NextJobber.**
+
+The original brand kit and its editable source are in [brand/nextjobber](brand/nextjobber/START-HERE.html). Download the folder and open `START-HERE.html` for the asset index, or `studio/index.html` for the local design editor.
 
 - [Development guide](docs/DEVELOPMENT.md): install, run, test, edit assessments and workflows, and publish updates.
 - [Project identity and source snapshot](docs/PROJECT.md): the existing Site, plugin, and source version this copy came from.

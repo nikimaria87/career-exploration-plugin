@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "dev-3c1684dd4fb48191b2ae177ea06727a3",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
   "author": {
     "name": "App developer"
