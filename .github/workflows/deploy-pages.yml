@@ -1,0 +1,41 @@
+name: Deploy NextJobber brand kit to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'public/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the source
+        uses: actions/checkout@v4
+      - name: Verify the static entry points
+        run: |
+          test -f public/index.html
+          test -f public/brand-kit/START-HERE.html
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload the public folder
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
