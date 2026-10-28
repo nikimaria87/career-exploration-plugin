@@ -4,15 +4,16 @@ A private Site-hosted ChatGPT plugin for independent job seekers. It combines or
 
 ## Edit your own copy
 
-This private repository contains the full application source and the current plugin package under `plugin-skills/`. **The plugin is named NextJobber.**
+This repository contains the full application source and the current plugin package under `plugin-skills/`. **The plugin is named NextJobber.**
 
 The original brand kit and its editable source are in [brand/nextjobber](brand/nextjobber/START-HERE.html). Download the folder and open `START-HERE.html` for the asset index, or `studio/index.html` for the local design editor.
 
+- [Editing NextJobber](docs/EDITING_NEXTJOBBER.md): create assessments in the app, ask in chat, or edit code on GitHub.
 - [Development guide](docs/DEVELOPMENT.md): install, run, test, edit assessments and workflows, and publish updates.
 - [Project identity and source snapshot](docs/PROJECT.md): the existing Site, plugin, and source version this copy came from.
 - [Repository](https://github.com/nikimaria87/career-exploration-plugin).
 
-GitHub commits save your source changes. Publishing the Site and updating packaged chat skills are separate release steps; this repository has no automatic production deployment configured. Saved user data remains in the existing hosted database and is not part of this repository.
+GitHub commits save your source changes. GitHub Actions automatically publishes static files from `public/` to GitHub Pages. Publishing the full Sites app and updating packaged chat skills are separate release steps. Saved user data remains in the existing hosted database and is not part of this repository.
 
 For local development, use Node.js 22.13 or newer and the pnpm version pinned in `package.json`:
 
@@ -28,8 +29,8 @@ Run `corepack pnpm test` and `corepack pnpm typecheck` before releasing. See the
 ## What runs where
 
 - ChatGPT handles open-ended career interpretation, resume and cover letter writing, interview practice, and broader searches through available tools. Six packaged workflow skills guide these tasks.
-- The Site MCP endpoint exposes 16 tools for scoped storage, deterministic assessment scoring, live Jobicy discovery, evidence coverage, learning plans, drafts, exports, and deletion.
-- The companion dashboard lets signed-in users take questionnaires, save jobs, update their tracker, view drafts and complete learning milestones.
+- The Site MCP endpoint exposes 18 tools for scoped storage, deterministic assessment scoring, custom questionnaire authoring, live Jobicy discovery, evidence coverage, learning plans, drafts, exports, and deletion.
+- The companion dashboard lets signed-in users create and edit private custom assessments, take questionnaires, review saved results, save jobs, update their tracker, view drafts and complete learning milestones.
 - No separate model API key is required. The website does not run a model or generate career advice independently of chat.
 
 ## Original questionnaires, version 1.0.0

@@ -1,5 +1,7 @@
 # Make your own updates
 
+For the in-app assessment editor, chat authoring, brand colors, and the difference between GitHub Pages and the app, see [Editing NextJobber](EDITING_NEXTJOBBER.md).
+
 ## Local setup
 
 Use Node.js 22.13 or newer. `tests/career.mjs` uses Node's built-in SQLite module. Use the exact pnpm version in `package.json` (`11.25.0` at export), through Corepack or a separately installed matching pnpm.
@@ -29,6 +31,8 @@ Within ChatGPT Work, use the installed Sites skill's dependency setup, source he
 | Change | Source |
 | --- | --- |
 | Dashboard and user flows | `app/dashboard.tsx` |
+| Custom assessment editor | `app/assessment-workspace.tsx` |
+| Custom questionnaire validation | `lib/career/assessment-templates.ts` |
 | Styling | `app/globals.css` |
 | Page title and description | `app/layout.tsx` |
 | Questionnaire wording, domains, scoring, learning suggestions | `lib/career/assessments.ts` |
@@ -58,7 +62,7 @@ git push -u origin describe-your-change
 
 Stage the actual files you edited; the example paths are not an exhaustive list. Review changes in GitHub and merge when ready. No production deployment runs automatically from these commands.
 
-The existing 14 behavior checks exercise account isolation, record revisions, scoring with skipped answers, job mapping, API guards, follow-up dates, exports, deletion, and MCP discovery. Type checking and a build provide additional checks before publication. The behavior tests mock the external job feed and do not verify a live authenticated deployment.
+The 20 behavior checks exercise account isolation, record revisions, scoring with skipped answers, job mapping, API guards, follow-up dates, exports, deletion, and MCP discovery, plus custom template validation, ownership, stale edits, scoring and result snapshots. Type checking and a build provide additional checks before publication. The behavior tests mock the external job feed and do not verify a live authenticated deployment.
 
 ## Keep the chat workflows in sync
 
@@ -84,7 +88,7 @@ GitHub is your editable source repository. The dashboard and MCP tools still run
 
 For example: "Publish the latest main commit from nikimaria87/career-exploration-plugin to my existing NextJobber Site. Preserve its project, database, plugin identity, and private access. Update the six packaged skills if they changed."
 
-The supported publication path needs Sites and, for packaged skills, Plugin Creator. This repository does not yet provide a standalone deployment CLI or a GitHub Actions deployment pipeline. Deploying the application to another host would require implementing authentication and infrastructure for that host; the production auth headers are supplied by Sites.
+The supported publication path needs Sites and, for packaged skills, Plugin Creator. The full app has no standalone deployment CLI or automatic GitHub-to-Sites pipeline. A separate GitHub Actions workflow publishes only `public/` to GitHub Pages. Deploying the application to another host would require implementing authentication and infrastructure for that host; the production auth headers are supplied by Sites.
 
 ## Rename the product
 

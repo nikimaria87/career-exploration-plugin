@@ -1,6 +1,6 @@
 export const assessmentTypes = ['interests','work_values','skill_evidence','learning_readiness'] as const;
 export type AssessmentType = typeof assessmentTypes[number];
-type Question = {id:string; domain:string; text:string};
+export type Question = {id:string; domain:string; text:string};
 const rows: Record<AssessmentType, [string,string,string][]> = {
  interests:[
  ['i1','Helping','Coach someone through a difficult decision.'],['i2','Helping','Explain a new process patiently to someone.'],['i3','Helping','Support someone in reaching a personal goal.'],
@@ -41,15 +41,19 @@ export function getAssessment(type:AssessmentType) {
   anchors,questions:rows[type].map(([id,domain,text])=>({id,domain,text}))};
 }
 export function scoreAssessment(type:AssessmentType, answers:Record<string,number|null>, evidence:Record<string,string>={}) {
- const assessment=getAssessment(type); const ids=new Set(assessment.questions.map(q=>q.id));
+ const assessment=getAssessment(type);
+ return {type,version:assessment.version,...scoreQuestionnaire(assessment,answers,evidence,['skill_evidence','learning_readiness'].includes(type))};
+}
+export function scoreQuestionnaire(assessment:{questions:Question[]}, answers:Record<string,number|null>, evidence:Record<string,string>={},includeLearningPriorities=false) {
+ const ids=new Set(assessment.questions.map(q=>q.id));
  for(const [id,value] of Object.entries(answers)) if(!ids.has(id)|| (value!==null&&(!Number.isInteger(value)||value<1||value>5))) throw new Error('Invalid assessment answer: '+id);
  for(const id of Object.keys(evidence)) if(!ids.has(id)) throw new Error('Unknown evidence item: '+id);
- const groups: Record<string,{values:number[];total:number;examples:string[]}>={};
- for(const q of assessment.questions){ const g=groups[q.domain]??={values:[],total:0,examples:[]}; g.total++; const v=answers[q.id]; if(v!==null&&v!==undefined)g.values.push(v); if(evidence[q.id]?.trim())g.examples.push(evidence[q.id].trim()); }
- const answered=Object.values(groups).reduce((n,g)=>n+g.values.length,0);
+ const groups=new Map<string,{values:number[];total:number;examples:string[]}>();
+ for(const q of assessment.questions){ const g=groups.get(q.domain)??{values:[],total:0,examples:[]}; groups.set(q.domain,g); g.total++; const v=answers[q.id]; if(v!==null&&v!==undefined)g.values.push(v); if(evidence[q.id]?.trim())g.examples.push(evidence[q.id].trim()); }
+ const answered=[...groups.values()].reduce((n,g)=>n+g.values.length,0);
  if(!answered)throw new Error('Answer at least one question before submitting.');
- const domains=Object.entries(groups).map(([domain,g])=>{const coverage=g.values.length/g.total;const mean=g.values.length?g.values.reduce((a,b)=>a+b,0)/g.values.length:null;return {domain,answered:g.values.length,total:g.total,mean:mean===null?null:Math.round(mean*100)/100,score:mean!==null&&coverage>=0.5?Math.round((mean-1)*25):null,insufficientData:coverage<0.5,evidence:g.examples,evidenceStatus:g.examples.length?'User-provided example; not independently verified':'No example supplied',nextStep:learningActions[domain]??'Explore roles with this feature, then compare them with your constraints and actual experience.'};});
- return {type,version:assessment.version,answered,total:assessment.questions.length,completion:Math.round(answered/assessment.questions.length*100),domains,
-  learningPriorities:['skill_evidence','learning_readiness'].includes(type)?domains.filter(d=>d.mean!==null&&d.mean<4).sort((a,b)=>a.mean!-b.mean!).map(d=>({domain:d.domain,action:d.nextStep,reason:'Self-reported score below independent/consistent practice. Confirm relevance to the target role before prioritizing.'})):[],
+ const domains=[...groups.entries()].map(([domain,g])=>{const coverage=g.values.length/g.total;const mean=g.values.length?g.values.reduce((a,b)=>a+b,0)/g.values.length:null;return {domain,answered:g.values.length,total:g.total,mean:mean===null?null:Math.round(mean*100)/100,score:mean!==null&&coverage>=0.5?Math.round((mean-1)*25):null,insufficientData:coverage<0.5,evidence:g.examples,evidenceStatus:g.examples.length?'User-provided example; not independently verified':'No example supplied',nextStep:Object.hasOwn(learningActions,domain)?learningActions[domain]:'Explore roles with this feature, then compare them with your constraints and actual experience.'};});
+ return {answered,total:assessment.questions.length,completion:Math.round(answered/assessment.questions.length*100),domains,
+  learningPriorities:includeLearningPriorities?domains.filter(d=>d.mean!==null&&d.mean<4).sort((a,b)=>a.mean!-b.mean!).map(d=>({domain:d.domain,action:d.nextStep,reason:'Self-reported score below independent/consistent practice. Confirm relevance to the target role before prioritizing.'})):[],
   interpretation:'Scores rescale the available 1–5 item means to 0–100 using (mean−1)×25. Domains below 50% answered have no score. These are descriptive self-reports, not population percentiles. Unknown evidence is not proof of inability. Do not use for employer screening.'};
 }

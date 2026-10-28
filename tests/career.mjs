@@ -4,14 +4,14 @@ import {DatabaseSync} from 'node:sqlite';
 import assert from 'node:assert/strict';
 import ts from 'typescript';
 const dir=new URL('../.sites-runtime/test-runtime/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('package.json',dir),'{"type":"commonjs"}');
-const files=['assessments','store','jobs','workflows','tools'];
+const files=['assessments','assessment-templates','store','jobs','workflows','tools'];
 for(const f of files){let text=readFileSync(new URL('../lib/career/'+f+'.ts',import.meta.url),'utf8');if(f==='store')text=text.replace("import {env} from 'cloudflare:workers';","const env = {DB: (globalThis as any).__careerTestDB};");writeFileSync(new URL(f+'.js',dir),ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);}
 for(const [name,path] of [['mcp','../app/mcp/route.ts'],['api','../app/api/career/route.ts']]){let text=readFileSync(new URL(path,import.meta.url),'utf8').replace("'@/lib/career/tools'","'./tools'");writeFileSync(new URL(name+'.js',dir),ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText);}
 const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../drizzle/0000_same_bromley.sql',import.meta.url),'utf8'));
 globalThis.__careerTestDB={prepare(query){return {bind(...args){const s=sql.prepare(query);return {async first(){return s.get(...args)??null;},async all(){return {results:s.all(...args)};},async run(){const r=s.run(...args);return {meta:{changes:Number(r.changes)}};}}}}}};
 const require=createRequire(new URL('entry.js',dir));const {callTool,toolList}=require('./tools');const {scoreAssessment,getAssessment,assessmentTypes}=require('./assessments');const {POST}=require('./mcp');const {POST:API}=require('./api');
 let checks=0;async function test(name,fn){await fn();checks++;console.log('PASS '+name);}
-await test('MCP tools have strict object schemas and annotations',()=>{assert.equal(toolList().length,16);for(const t of toolList()){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.equal(typeof t.annotations.readOnlyHint,'boolean');}});
+await test('MCP tools have strict object schemas and annotations',()=>{assert.equal(toolList().length,18);for(const t of toolList()){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.equal(typeof t.annotations.readOnlyHint,'boolean');}});
 await test('All questionnaires score complete and skipped responses accurately',()=>{for(const type of assessmentTypes){const a=getAssessment(type);const values=Object.fromEntries(a.questions.map(q=>[q.id,5]));const r=scoreAssessment(type,values);assert.equal(r.completion,100);assert(r.domains.every(d=>d.score===100));const skipped=scoreAssessment(type,{[a.questions[0].id]:1});assert(skipped.completion<100);assert(skipped.domains.some(d=>d.score===null));}const r=scoreAssessment('interests',{i1:5});assert.equal(r.domains[0].score,null);assert.equal(r.domains[0].insufficientData,true);});
 await test('Assessments reject invented item IDs, out-of-range ratings and empty submissions',()=>{assert.throws(()=>scoreAssessment('interests',{fake:5}));assert.throws(()=>scoreAssessment('interests',{i1:0}));assert.throws(()=>scoreAssessment('interests',{i1:null}));});
 await test('Profiles are isolated by authenticated owner',async()=>{await callTool('save_profile',{profile:{summary:'Synthetic test profile',targetRoles:['Analyst']}},'owner-a');assert.equal((await callTool('get_workspace',{},'owner-b')).profile,null);assert.equal((await callTool('get_workspace',{},'owner-a')).profile.data.summary,'Synthetic test profile');});
@@ -25,4 +25,40 @@ await test('Deletes require the correct owner and current revision',async()=>{aw
 await test('MCP supports discovery and rejects unsigned tool calls',async()=>{const req=(body,owner)=>new Request('https://career.test/mcp',{method:'POST',headers:{'Content-Type':'application/json',...(owner?{'oai-authenticated-user-id':owner}:{})},body:JSON.stringify(body)});let r=await (await POST(req({jsonrpc:'2.0',id:1,method:'server/discover'}))).json();assert.deepEqual(r.result.supportedVersions,['2026-07-28']);r=await (await POST(req({jsonrpc:'2.0',id:2,method:'tools/call',params:{name:'get_workspace',arguments:{}}}))).json();assert.equal(r.result.isError,true);r=await (await POST(req({jsonrpc:'2.0',id:3,method:'tools/call',params:{name:'get_workspace',arguments:{}}},'owner-b'))).json();assert.equal(r.result.structuredContent.profile,null);assert.equal(r.result.isError,false);});
 await test('Browser API denies cross-origin and anonymous requests',async()=>{const req=(headers)=>new Request('https://career.test/api/career',{method:'POST',headers,body:JSON.stringify({name:'get_workspace',arguments:{}})});assert.equal((await API(req({'origin':'https://evil.test','oai-authenticated-user-id':'owner-a'}))).status,403);assert.equal((await API(req({'origin':'https://career.test'}))).status,401);});
 await test('Job feed mapping preserves links, salary unknowns, filters, and provider errors',async()=>{const original=globalThis.fetch;let called;globalThis.fetch=async(u)=>{called=String(u);return Response.json({success:true,jobs:[{id:1,jobTitle:'<b>Analyst</b>',companyName:'Sample',jobGeo:'USA',jobDescription:'<script>bad()</script><p>Analyze data</p>',url:'https://jobicy.com/jobs/1',pubDate:'2026-10-21'}],nextCursor:'opaque'});};try{const r=await callTool('search_jobs',{query:'analyst',limit:10},'owner-a');assert.match(called,/tag=analyst/);assert.equal(r.jobs[0].salary,null);assert.equal(r.jobs[0].title,'Analyst');assert.equal(r.jobs[0].description,'Analyze data');assert.equal(r.jobs[0].url,'https://jobicy.com/jobs/1');assert.equal(r.nextCursor,'opaque');globalThis.fetch=async()=>new Response('Unavailable',{status:503});await assert.rejects(callTool('search_jobs',{query:'analyst',limit:10},'owner-a'),/503/);}finally{globalThis.fetch=original;}});
+const template={title:'Career clarity',description:'A private practice reflection.',instructions:'Rate each statement.',anchors:['Not yet','Rarely','Sometimes','Usually','Consistently'],questions:[{id:'q1',domain:'Clarity',text:'I can explain my goal.'},{id:'q2',domain:'Clarity',text:'I know my next step.'},{id:'q3',domain:'Support',text:'I can ask for useful help.'}]};
+await test('Custom templates validate rating labels, limits, unique IDs and plain fields',async()=>{
+ for(const bad of [{...template,anchors:['One']},{...template,questions:[]},{...template,questions:Array(51).fill(template.questions[0])},{...template,questions:[template.questions[0],template.questions[0]]},{...template,title:'   '},{...template,script:'alert(1)'}])await assert.rejects(callTool('save_assessment_template',{template:bad},'template-owner'));
+ const saved=await callTool('save_assessment_template',{id:'custom',template},'template-owner');assert.equal(saved.revision,1);assert.equal(saved.data.questions[0].id,'q1');
+});
+await test('Custom template reads, lists, submissions and edits are isolated by owner',async()=>{
+ assert.equal(await callTool('get_record',{kind:'assessment_template',id:'custom'},'other-owner'),null);
+ assert.equal((await callTool('list_records',{kind:'assessment_template'},'other-owner')).records.length,0);
+ await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:1,answers:{q1:5}},'other-owner'),/not found/);
+ await assert.rejects(callTool('save_assessment_template',{id:'custom',expectedRevision:1,template},'other-owner'));
+});
+await test('Custom scores omit skipped items and keep insufficient categories unscored',async()=>{
+ const saved=await callTool('submit_custom_assessment',{id:'custom-result',templateId:'custom',templateRevision:1,answers:{q1:5,q2:null},evidence:{q1:'A real example supplied by the user.'}},'template-owner');
+ assert.equal(saved.data.completion,33);assert.equal(saved.data.domains[0].score,100);assert.equal(saved.data.domains[1].score,null);assert.equal(saved.data.definition.anchors[4],'Consistently');
+ assert.equal(await callTool('get_record',{kind:'assessment',id:'custom-result'},'other-owner'),null);
+ for(const answers of [{fake:5},{q1:0},{q1:6},{q1:null},{}])await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:1,answers},'template-owner'));
+ await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:1,answers:{q1:4},evidence:{fake:'Unknown'}},'template-owner'));
+});
+await test('Custom edits use revisions and preserve the meaning of previous results',async()=>{
+ const changed={...template,title:'Revised title',anchors:['1','2','3','4','5'],questions:[{id:'q1',domain:'Different category',text:'A different question.'}]};
+ await assert.rejects(callTool('save_assessment_template',{id:'custom',template:changed},'template-owner'));
+ const saved=await callTool('save_assessment_template',{id:'custom',expectedRevision:1,template:changed},'template-owner');assert.equal(saved.revision,2);
+ await assert.rejects(callTool('save_assessment_template',{id:'custom',expectedRevision:1,template},'template-owner'));
+ await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:1,answers:{q1:5}},'template-owner'),/edited/);
+ const past=await callTool('get_record',{kind:'assessment',id:'custom-result'},'template-owner');assert.equal(past.data.title,'Career clarity');assert.equal(past.data.templateRevision,1);assert.equal(past.data.definition.questions[0].text,template.questions[0].text);assert.equal(past.data.definition.anchors[4],'Consistently');
+ const current=await callTool('submit_custom_assessment',{templateId:'custom',templateRevision:2,answers:{q1:3}},'template-owner');assert.equal(current.data.domains[0].score,50);assert.equal(current.data.templateRevision,2);
+});
+await test('Custom category names cannot collide with object prototypes',async()=>{
+ const saved=await callTool('save_assessment_template',{template:{...template,questions:[{id:'p1',domain:'__proto__',text:'A safe category.'}]}},'template-owner');
+ const result=await callTool('submit_custom_assessment',{templateId:saved.id,templateRevision:1,answers:{p1:4}},'template-owner');assert.equal(result.data.domains[0].domain,'__proto__');assert.equal(result.data.domains[0].score,75);
+});
+await test('Deleting a template keeps past result snapshots and prevents new submissions',async()=>{
+ await callTool('delete_record',{kind:'assessment_template',id:'custom',expectedRevision:2},'template-owner');
+ assert.equal((await callTool('get_record',{kind:'assessment',id:'custom-result'},'template-owner')).data.title,'Career clarity');
+ await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:2,answers:{q1:5}},'template-owner'),/not found/);
+});
 console.log(`${checks} checks passed.`);sql.close();

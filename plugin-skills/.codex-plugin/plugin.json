@@ -5,13 +5,13 @@
     "category": "Other",
     "defaultPrompt": null,
     "developerName": "App developer",
-    "displayName": "Career Compass",
+    "displayName": "NextJobber",
     "longDescription": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
     "shortDescription": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
     "websiteURL": "https://career-compass-explore-1022.fizzy-camel-0518.chatgpt.site"
   },
   "name": "dev-3c1684dd4fb48191b2ae177ea06727a3",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Career exploration, learning assessments, job discovery and application support for independent job seekers.",
   "author": {
     "name": "App developer"

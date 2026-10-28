@@ -1,5 +1,5 @@
 import {env} from 'cloudflare:workers';
-export const kinds=['profile','assessment','application','learning_plan','draft','fit_report'] as const;
+export const kinds=['profile','assessment','assessment_template','application','learning_plan','draft','fit_report'] as const;
 export type Kind=typeof kinds[number];
 export type CareerRecord={kind:Kind;id:string;data:any;revision:number;createdAt:string;updatedAt:string};
 function database(){if(!env.DB)throw new Error('Storage is unavailable. Please try again later.');return env.DB;}
