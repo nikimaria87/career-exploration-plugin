@@ -2,6 +2,10 @@
 
 A private Site-hosted ChatGPT plugin for independent job seekers. It combines original career self-reflection questionnaires, transferable-skill evidence, live remote job discovery, requirement comparisons, application drafts, learning plans, and an application tracker.
 
+## Planned updates
+
+- [Explore Yourself: assessment customization and role scenarios](docs/explore-yourself/README.md) — feasibility, proposed workflow, safeguards, implementation phases and acceptance criteria. **Planning only; not implemented.** Role scenarios are designated as a future paid feature.
+
 ## Edit your own copy
 
 This repository contains the full application source and the current plugin package under `plugin-skills/`. **The plugin is named NextJobber.**
