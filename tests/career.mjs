@@ -4,14 +4,14 @@ import {DatabaseSync} from 'node:sqlite';
 import assert from 'node:assert/strict';
 import ts from 'typescript';
 const dir=new URL('../.sites-runtime/test-runtime/',import.meta.url);mkdirSync(dir,{recursive:true});writeFileSync(new URL('package.json',dir),'{"type":"commonjs"}');
-const files=['assessments','assessment-templates','store','jobs','workflows','tools'];
+const files=['assessments','assessment-templates','text-cleanup','store','jobs','workflows','tools'];
 for(const f of files){let text=readFileSync(new URL('../lib/career/'+f+'.ts',import.meta.url),'utf8');if(f==='store')text=text.replace("import {env} from 'cloudflare:workers';","const env = {DB: (globalThis as any).__careerTestDB};");writeFileSync(new URL(f+'.js',dir),ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText);}
 for(const [name,path] of [['mcp','../app/mcp/route.ts'],['api','../app/api/career/route.ts']]){let text=readFileSync(new URL(path,import.meta.url),'utf8').replace("'@/lib/career/tools'","'./tools'");writeFileSync(new URL(name+'.js',dir),ts.transpileModule(text,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText);}
 const sql=new DatabaseSync(':memory:');sql.exec(readFileSync(new URL('../drizzle/0000_same_bromley.sql',import.meta.url),'utf8'));
 globalThis.__careerTestDB={prepare(query){return {bind(...args){const s=sql.prepare(query);return {async first(){return s.get(...args)??null;},async all(){return {results:s.all(...args)};},async run(){const r=s.run(...args);return {meta:{changes:Number(r.changes)}};}}}}}};
 const require=createRequire(new URL('entry.js',dir));const {callTool,toolList}=require('./tools');const {scoreAssessment,getAssessment,assessmentTypes}=require('./assessments');const {POST}=require('./mcp');const {POST:API}=require('./api');
 let checks=0;async function test(name,fn){await fn();checks++;console.log('PASS '+name);}
-await test('MCP tools have strict object schemas and annotations',()=>{assert.equal(toolList().length,18);for(const t of toolList()){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.equal(typeof t.annotations.readOnlyHint,'boolean');}});
+await test('MCP tools have strict object schemas and annotations',()=>{assert.equal(toolList().length,19);for(const t of toolList()){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.equal(typeof t.annotations.readOnlyHint,'boolean');}});
 await test('All questionnaires score complete and skipped responses accurately',()=>{for(const type of assessmentTypes){const a=getAssessment(type);const values=Object.fromEntries(a.questions.map(q=>[q.id,5]));const r=scoreAssessment(type,values);assert.equal(r.completion,100);assert(r.domains.every(d=>d.score===100));const skipped=scoreAssessment(type,{[a.questions[0].id]:1});assert(skipped.completion<100);assert(skipped.domains.some(d=>d.score===null));}const r=scoreAssessment('interests',{i1:5});assert.equal(r.domains[0].score,null);assert.equal(r.domains[0].insufficientData,true);});
 await test('Assessments reject invented item IDs, out-of-range ratings and empty submissions',()=>{assert.throws(()=>scoreAssessment('interests',{fake:5}));assert.throws(()=>scoreAssessment('interests',{i1:0}));assert.throws(()=>scoreAssessment('interests',{i1:null}));});
 await test('Profiles are isolated by authenticated owner',async()=>{await callTool('save_profile',{profile:{summary:'Synthetic test profile',targetRoles:['Analyst']}},'owner-a');assert.equal((await callTool('get_workspace',{},'owner-b')).profile,null);assert.equal((await callTool('get_workspace',{},'owner-a')).profile.data.summary,'Synthetic test profile');});
@@ -60,5 +60,35 @@ await test('Deleting a template keeps past result snapshots and prevents new sub
  await callTool('delete_record',{kind:'assessment_template',id:'custom',expectedRevision:2},'template-owner');
  assert.equal((await callTool('get_record',{kind:'assessment',id:'custom-result'},'template-owner')).data.title,'Career clarity');
  await assert.rejects(callTool('submit_custom_assessment',{templateId:'custom',templateRevision:2,answers:{q1:5}},'template-owner'),/not found/);
+});
+await test('Application cleanup reports exact formatting changes without claiming watermark detection',async()=>{
+ const source='\uFEFFNicole\u00A0Maria\r\nRe\u00ADsearcher\u0000\t2020–2026';
+ const result=await callTool('clean_application_text',{text:source},'output-owner');
+ assert.equal(result.text,'Nicole Maria\nResearcher\t2020–2026');assert.equal(result.report.changed,true);assert.equal(result.report.changes.length,5);
+ assert.equal(result.report.watermarkStatus,'not_assessed');assert.equal(result.report.aiDetectorStatus,'not_assessed');
+ assert.equal((await callTool('list_records',{},'output-owner')).records.length,0);
+ const again=await callTool('clean_application_text',{text:result.text},'output-owner');assert.equal(again.report.changed,false);assert.deepEqual(again.report.changes,[]);
+});
+await test('Application cleanup preserves facts, punctuation, emoji and meaningful Unicode',async()=>{
+ const text='Renée O’Neill — Analyst, 2020–2026; $85,000; +1 555 123 4567\nhttps://example.com/a?b=1&c=2\nمی\u200Cروم | क्\u200Dष | 中文 | 👩\u200D💻 ❤️ | \u2067עברית\u2069 | Thai\u200Btext';
+ const result=await callTool('clean_application_text',{text},'output-owner');assert.equal(result.text,text);assert.equal(result.report.changed,false);
+});
+await test('Application cleanup rejects empty results, file containers, and unexpected options',async()=>{
+ for(const text of ['','\uFEFF\u0000','%PDF-1.7 content','PK\u0003\u0004word/document.xml','x'.repeat(80001)])await assert.rejects(callTool('clean_application_text',{text},'output-owner'));
+ await assert.rejects(callTool('clean_application_text',{text:'A draft',guaranteeUndetectable:true},'output-owner'));
+});
+await test('Every newly saved draft is cleaned automatically while retaining owner and revision guards',async()=>{
+ for(const type of ['resume','cover_letter','interview','follow_up']){
+  const r=await callTool('save_draft',{id:'output-'+type,draft:{type,title:'Real draft',content:'Nicole\u00A0Maria\r\nResearcher'}},'output-owner');
+  assert.equal(r.data.content,'Nicole Maria\nResearcher');assert.equal(r.data.textCleanup.changed,true);assert.equal(r.data.textCleanup.watermarkStatus,'not_assessed');
+  assert.equal(await callTool('get_record',{kind:'draft',id:r.id},'other-output-owner'),null);
+  await assert.rejects(callTool('save_draft',{id:r.id,expectedRevision:99,draft:{type,title:'Stale',content:'Other text'}},'output-owner'));
+  const edited=await callTool('save_draft',{id:r.id,expectedRevision:r.revision,draft:{type,title:'Edited',content:'Research\u00ADer'}},'output-owner');assert.equal(edited.revision,2);assert.equal(edited.data.content,'Researcher');
+ }
+});
+await test('Live workflow guidance covers professional output and states verification limits',async()=>{
+ for(const topic of ['start','exploration','jobs','applications','learning','tracking']){
+  const w=await callTool('get_workflow',{topic},'output-owner');assert.match(w.outputPolicy,/clean_application_text/);assert.match(w.outputPolicy,/Never promise watermark-free/);assert.match(w.outputPolicy,/voice/);
+ }
 });
 console.log(`${checks} checks passed.`);sql.close();

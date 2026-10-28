@@ -32,7 +32,7 @@ Always select the existing Site so the update preserves its app identity and sav
 
 ## Edit code on GitHub
 
-Source: https://github.com/nikimaria87/career-exploration-plugin
+Source: https://github.com/nikimaria87/nextjobber-plugin
 
 You can edit files in GitHub's web editor, open a codespace, or clone the repository. Commit changes to your own branch and merge them when ready. Never add credentials, personal assessment responses, or local database files.
 
@@ -75,3 +75,5 @@ GitHub Pages cannot run the app's Worker, private database, or authenticated MCP
 ## Brand identity
 
 NextJobber uses plum `#4C1734`, rose `#E3B4C6`, ink `#241C24`, warm gray `#766B70`, and paper `#FBF7F9`. Reuse the existing SVG wordmark and symbol in `public/brand/` for sharp rendering. The complete editable kit is in `brand/nextjobber/` in the GitHub repository and the static previews are in `public/brand-kit/`.
+
+For application text cleanup, document export checks and limits on watermark/detector claims, see [Output quality and provenance](OUTPUT_QUALITY.md).

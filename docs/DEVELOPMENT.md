@@ -7,8 +7,8 @@ For the in-app assessment editor, chat authoring, brand colors, and the differen
 Use Node.js 22.13 or newer. `tests/career.mjs` uses Node's built-in SQLite module. Use the exact pnpm version in `package.json` (`11.25.0` at export), through Corepack or a separately installed matching pnpm.
 
 ```sh
-git clone https://github.com/nikimaria87/career-exploration-plugin.git
-cd career-exploration-plugin
+git clone https://github.com/nikimaria87/nextjobber-plugin.git
+cd nextjobber-plugin
 corepack pnpm install --frozen-lockfile
 corepack pnpm dev
 ```
@@ -62,7 +62,7 @@ git push -u origin describe-your-change
 
 Stage the actual files you edited; the example paths are not an exhaustive list. Review changes in GitHub and merge when ready. No production deployment runs automatically from these commands.
 
-The 20 behavior checks exercise account isolation, record revisions, scoring with skipped answers, job mapping, API guards, follow-up dates, exports, deletion, and MCP discovery, plus custom template validation, ownership, stale edits, scoring and result snapshots. Type checking and a build provide additional checks before publication. The behavior tests mock the external job feed and do not verify a live authenticated deployment.
+The 25 behavior checks exercise account isolation, record revisions, scoring with skipped answers, job mapping, API guards, follow-up dates, exports, deletion, and MCP discovery, plus custom template validation, ownership, stale edits, scoring and result snapshots, plus application formatting cleanup, Unicode/fact preservation, unsupported file guards and automatic draft cleanup. Type checking and a build provide additional checks before publication. The behavior tests mock the external job feed and do not verify a live authenticated deployment.
 
 ## Keep the chat workflows in sync
 
@@ -103,3 +103,7 @@ Update the UI, page metadata, MCP display strings, workflows, generator, and doc
 ## Data and credentials
 
 The GitHub repository holds code and schema. Production user records remain in D1. Keep `.env*`, `.dev.vars*`, `.wrangler/`, `.sites-runtime/`, build output, and production exports out of commits. Runtime secrets belong in Sites environment settings; publication credentials are short-lived and should never be committed.
+
+## Application document quality
+
+The `clean_application_text` tool and `save_draft` share `lib/career/text-cleanup.ts`. Keep the exact-change report and explicit unassessed watermark/detector fields. The generator adds the same output policy to all six skills. See [Output quality and provenance](OUTPUT_QUALITY.md) for supported checks and account-wide limits.

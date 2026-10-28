@@ -11,15 +11,15 @@ The original brand kit and its editable source are in [brand/nextjobber](brand/n
 - [Editing NextJobber](docs/EDITING_NEXTJOBBER.md): create assessments in the app, ask in chat, or edit code on GitHub.
 - [Development guide](docs/DEVELOPMENT.md): install, run, test, edit assessments and workflows, and publish updates.
 - [Project identity and source snapshot](docs/PROJECT.md): the existing Site, plugin, and source version this copy came from.
-- [Repository](https://github.com/nikimaria87/career-exploration-plugin).
+- [Repository](https://github.com/nikimaria87/nextjobber-plugin).
 
 GitHub commits save your source changes. GitHub Actions automatically publishes static files from `public/` to GitHub Pages. Publishing the full Sites app and updating packaged chat skills are separate release steps. Saved user data remains in the existing hosted database and is not part of this repository.
 
 For local development, use Node.js 22.13 or newer and the pnpm version pinned in `package.json`:
 
 ```sh
-git clone https://github.com/nikimaria87/career-exploration-plugin.git
-cd career-exploration-plugin
+git clone https://github.com/nikimaria87/nextjobber-plugin.git
+cd nextjobber-plugin
 corepack pnpm install --frozen-lockfile
 corepack pnpm dev
 ```
@@ -29,7 +29,7 @@ Run `corepack pnpm test` and `corepack pnpm typecheck` before releasing. See the
 ## What runs where
 
 - ChatGPT handles open-ended career interpretation, resume and cover letter writing, interview practice, and broader searches through available tools. Six packaged workflow skills guide these tasks.
-- The Site MCP endpoint exposes 18 tools for scoped storage, deterministic assessment scoring, custom questionnaire authoring, live Jobicy discovery, evidence coverage, learning plans, drafts, exports, and deletion.
+- The Site MCP endpoint exposes 19 tools for scoped storage, deterministic assessment scoring, custom questionnaire authoring, live Jobicy discovery, evidence coverage, learning plans, drafts, exports, and deletion.
 - The companion dashboard lets signed-in users create and edit private custom assessments, take questionnaires, review saved results, save jobs, update their tracker, view drafts and complete learning milestones.
 - No separate model API key is required. The website does not run a model or generate career advice independently of chat.
 
@@ -64,3 +64,7 @@ Follow the installed Sites skill for dependencies, preview, building and publica
 - HTTP: `POST /mcp` for MCP; `POST /api/career` for same-origin dashboard actions.
 
 Do not check in credentials, local runtime state, private test data, or environment files. Publish the exact committed source through the Sites workflow. Reuse the same Site and its provisioned plugin on subsequent updates.
+
+## Application document quality
+
+Newly saved or updated drafts receive conservative text formatting cleanup and an exact report. The read-only `clean_application_text` tool supports final application prose in chat. All six workflows preserve the user's facts and voice and avoid unsolicited AI bylines, footers and decorative watermarks. This does not verify statistical watermarks, binary files, AI-detector outcomes, or other account conversations. See [Output quality and provenance](docs/OUTPUT_QUALITY.md).
